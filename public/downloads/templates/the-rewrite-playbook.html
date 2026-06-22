@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Rewrite Playbook — MK Parrish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --obsidian: #111111;
+    --carbon: #1A1A1A;
+    --graphite: #2C2C2C;
+    --iron: #4A4A4A;
+    --ash: #7A7A7A;
+    --smoke: #B0B0B0;
+    --pearl: #F0F0EE;
+    --white: #FAFAF8;
+    --blush: #FFD6E4;
+    --petal: #F2AFC6;
+    --rose: #E0869F;
+    --carmine: #C75B78;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    /* Reusable gray → pink gradients */
+    --grad-pink: linear-gradient(120deg, var(--rose), var(--petal) 55%, var(--blush));
+    --grad-rule: linear-gradient(90deg, transparent, var(--petal), transparent);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(242,175,198,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(199,91,120,0.05), transparent 55%),
+      linear-gradient(180deg, var(--obsidian) 0%, var(--void) 38%);
+    background-attachment: fixed;
+    color: var(--pearl);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.78;
+    position: relative;
+  }
+  /* Grain overlay — the site's signature texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: screen;
+  }
+  ::selection { background: var(--petal); color: var(--void); }
+
+  /* ── COVER ─────────────────────────────────────────── */
+  .cover {
+    position: relative;
+    background: var(--obsidian);
+    border-bottom: 1px solid var(--graphite);
+    padding: 104px 48px 84px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% -10%, rgba(242,175,198,0.20) 0%, transparent 62%),
+      radial-gradient(ellipse 50% 50% at 88% 108%, rgba(199,91,120,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, rgba(176,176,176,0.06), transparent 45%);
+    pointer-events: none;
+  }
+  /* Thin gray→pink gradient hairline across the very top */
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--iron), var(--petal) 50%, var(--blush));
+    opacity: 0.7;
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: var(--petal);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7.5vw, 4.6rem);
+    letter-spacing: 0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    color: var(--white);
+  }
+  /* Soft gray→white→pink gradient fill on the lead words */
+  .cover h1 .grad {
+    background: linear-gradient(135deg, var(--pearl) 0%, var(--pearl) 50%, var(--blush) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pearl);
+    filter: drop-shadow(0 0 16px rgba(242,175,198,0.14));
+  }
+  .cover h1 .outline {
+    -webkit-text-stroke: 1px rgba(242,175,198,0.5);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Subtitle — matches the live site tagline: Playfair italic, petal */
+  .cover .subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color: rgba(242, 175, 198, 0.8);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .cover-rule {
+    width: 90px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--petal), var(--blush), transparent);
+  }
+  .cover-meta {
+    margin-top: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+
+  /* ── CONTENT ───────────────────────────────────────── */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    counter-reset: section;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
+    color: var(--pearl);
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+
+  /* Section headings get an editorial mono counter, like the site's section numbers */
+  h2 {
+    counter-increment: section;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.3vw, 1.95rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pearl);
+    margin: 68px 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--graphite);
+    position: relative;
+  }
+  h2::before {
+    content: counter(section, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, var(--rose), var(--petal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--petal);
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--petal), rgba(242,175,198,0));
+  }
+  /* Sub-section labels — live-site accent: Playfair italic, petal */
+  h3 {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--petal);
+    margin: 40px 0 12px;
+  }
+  p { margin: 0 0 1.25em; color: var(--smoke); }
+  strong { color: var(--pearl); font-weight: 500; }
+  /* Emphasis — live-site accent: Playfair italic, petal */
+  em { font-family: var(--font-serif); font-style: italic; color: var(--petal); }
+  a { color: var(--petal); text-decoration: none; }
+  a:hover { color: var(--blush); text-decoration: underline; }
+
+  ul, ol { padding-left: 1.4em; margin: 0 0 1.6em; color: var(--smoke); }
+  li { margin-bottom: 0.55em; padding-left: 0.35em; }
+  ul li::marker { color: var(--petal); }
+  ol li::marker { color: var(--petal); font-family: var(--font-mono); font-size: 0.85em; }
+
+  blockquote {
+    position: relative;
+    border-left: 2px solid var(--petal);
+    margin: 40px 0;
+    padding: 26px 30px 26px 40px;
+    background: linear-gradient(110deg, rgba(242,175,198,0.10), rgba(176,176,176,0.04) 55%, transparent 90%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.08rem;
+    color: rgba(242, 175, 198, 0.9);
+    line-height: 1.6;
+  }
+  blockquote::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.08em;
+    left: 0.14em;
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(242,175,198,0.22);
+    pointer-events: none;
+  }
+
+  pre {
+    background: var(--carbon);
+    border: 1px solid var(--graphite);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  code { font-family: var(--font-mono); font-size: 0.86rem; color: var(--petal); white-space: pre; }
+  p > code, li > code {
+    background: var(--carbon);
+    padding: 2px 6px;
+    font-size: 0.82em;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 0.9rem; }
+  thead tr { background: linear-gradient(90deg, rgba(242,175,198,0.12), rgba(176,176,176,0.04) 70%, transparent); }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--petal);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--graphite); color: var(--smoke); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--iron) 25%, var(--petal) 50%, var(--iron) 75%, transparent);
+    opacity: 0.6;
+    margin: 52px 0;
+  }
+
+  /* ── FOOTER ────────────────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--graphite);
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--obsidian);
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-legal {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+  .footer-legal a { color: var(--ash); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PRINT EDITION — light, publisher-style layout for the PDF.
+     The screen stays dark; the printed book inverts to a white page
+     with black header boxes and pink/white titles.
+     ═══════════════════════════════════════════════════════════════ */
+  @media print {
+    /* Uniform book margins on every page (Puppeteer's margin is set to 0 so
+       these @page margins are the single source of truth). */
+    @page { margin: 0.8in; }
+
+    html, body {
+      background: #ffffff !important;
+      color: #232323 !important;
+    }
+    body::before { display: none !important; }   /* no grain in print */
+
+    /* ── COVER: a full black title page within the white margins ── */
+    .cover {
+      background: #ffffff !important;
+      border-bottom: none;
+      padding: 0;
+      break-after: page;
+    }
+    .cover::before, .cover::after { display: none !important; }
+    .cover-inner {
+      box-sizing: border-box;
+      min-height: 9.3in;          /* fills the Letter text area (11in − 2×0.8in) */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 64px;
+      background: #0E0E0E;
+      border: 1px solid rgba(242, 175, 198, 0.45);
+    }
+    .cover-kicker { color: var(--petal); }
+    .cover h1 { color: #ffffff; }
+    .cover h1 .grad {
+      background: linear-gradient(135deg, #ffffff 0%, #ffffff 46%, var(--blush) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: #ffffff;
+      filter: none;
+    }
+    .cover h1 .outline {
+      -webkit-text-stroke: 1px var(--petal);
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .cover .subtitle { color: var(--petal); }
+    .cover-meta { color: #8a8a8a; }
+
+    /* ── BODY: black text on white, filling the page margins so header
+       boxes align flush with the body text block ── */
+    .content { max-width: none; margin: 0; padding: 0; color: #232323; }
+    p { color: #2b2b2b; }
+    strong { color: #0A0A0A; }
+    a { color: #B23A59; }
+    ul li::marker, ol li::marker { color: #B23A59; }
+
+    /* ── SECTION HEADERS: black boxes, pink number + white title ── */
+    h2 {
+      background: #0E0E0E;
+      color: #ffffff;
+      padding: 20px 26px;
+      margin: 46px 0 30px;
+      border: none;
+    }
+    h2::before {
+      background: none;
+      -webkit-text-fill-color: var(--petal);
+      color: var(--petal);
+      margin-bottom: 10px;
+    }
+    h2::after { display: none; }
+
+    /* Sub-labels and emphasis in a print-legible pink */
+    h3 { color: #B23A59; }
+    em { color: #B23A59; }
+
+    /* ── PULL QUOTES: soft panel, pink rule + mark, dark text ── */
+    blockquote {
+      background: #F5F2F0;
+      border-left: 3px solid #B23A59;
+      color: #232323;
+    }
+    blockquote::before { color: rgba(178, 58, 89, 0.3); }
+
+    /* ── TABLES: black header band ── */
+    thead tr { background: #0E0E0E; }
+    th { color: #ffffff; border-bottom: 1px solid #0E0E0E; }
+    td { color: #2b2b2b; border-bottom: 1px solid #e3e3e3; }
+
+    /* ── CODE: light chip ── */
+    pre { background: #f3f3f1; border: 1px solid #e3e3e3; }
+    pre code { color: #A8344F; }
+    p > code, li > code { background: #f0eeec; color: #A8344F; }
+
+    hr {
+      background: linear-gradient(90deg, transparent, #cfcfcf 25%, #B23A59 50%, #cfcfcf 75%, transparent);
+      opacity: 1;
+    }
+
+    /* ── FOOTER: white page, black signature ── */
+    .footer { background: #ffffff; border-top: 1px solid #dddddd; }
+    .footer-logo { color: #0A0A0A; }
+    .footer-legal { color: #8a8a8a; }
+    .footer-legal a { color: #B23A59; }
+
+    /* ── PAGINATION — natural flow; just avoid bad breaks ── */
+    h1, h2, h3 { break-after: avoid-page; break-inside: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    h2, h3, li, tr, blockquote, pre, table, figure, img { break-inside: avoid; }
+    ul, ol { break-before: avoid-page; }
+    .footer { break-before: avoid-page; }
+  }
+  *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-kicker">MK Parrish · mkparrish.com</div>
+    <h1><span class="grad">The Rewrite</span> <span class="outline">Playbook</span></h1>
+    
+    <div class="cover-rule"></div>
+    
+  </div>
+</div>
+
+<div class="content">
+
+<h3>A self-guided LinkedIn and professional story overhaul — the full thing.</h3>
+
+<p><strong>By MK Parrish</strong></p>
+<p><strong>Price: $45</strong></p>
+
+<hr>
+
+<h2>Why this exists</h2>
+
+<p>You are being read right now. By a recruiter skimming, a prospect deciding, a stranger forming an opinion in the four seconds it takes to scroll past your face. And the story they're reading isn't the one you'd tell. It's the leftover one — the bio you updated in a hurry two jobs ago, the headline that still says your old title, the "About" section that opens with "Experienced professional with a proven track record."</p>
+
+<p>You're being misread. Not because you're not impressive. Because nobody rewrote the page after you changed.</p>
+
+<p>The Rewrite is the work I do with people at a turn — a pivot, a promotion, a leaving, a starting-over. We don't decorate the old story. We rebuild it from the truth up, so the page finally matches the person. This Playbook is that whole process, documented and handed to you.</p>
+
+<p>It's longer than the others on purpose. This is the flagship. Set aside a few sessions. Work in order — the story audit feeds the positioning statement, which feeds the LinkedIn, which feeds the bios. Do them out of order and you'll be decorating again.</p>
+
+<p>What you'll build, in order:</p>
+<ol><li>A story audit — career, identity, and pivot narrative</li><li>A positioning statement that holds the whole thing together</li><li>A full LinkedIn rebuild, section by section</li><li>Bio rewrites for every length you need</li></ol>
+
+<p>Pen out. Let's find the real story and write it down straight.</p>
+
+<hr>
+
+<h2>Part 1 — The Story Audit</h2>
+
+<p>Before you write a word of copy, you find the story. Most people skip this and end up polishing a story that was never theirs to begin with. The audit runs in three layers: career, identity, pivot.</p>
+
+<h3>Layer 1 — The Career Audit</h3>
+
+<p>Don't list jobs. List <em>turns</em> — the moments the work changed you or you changed it.</p>
+
+<pre><code>THE TURNS
+<p>  For each significant role/project, answer:</p>
+
+<p>  - What was actually broken when I arrived? ____________</p>
+<p>  - What did I do that someone else wouldn't have? ____________</p>
+<p>  - What's the number, name, or outcome that proves it? ____________</p>
+<p>  - What did I learn that I still use? ____________</p>
+<p>  - What did I leave behind / outgrow here? ____________</p>
+<p></code></pre></p>
+
+<p>Run this for your last three or four meaningful roles. You're hunting for the through-line — the thing you keep doing across every job, regardless of title. That's your spine.</p>
+
+<pre><code>THE THROUGH-LINE
+<p>  Across every role, the thing I keep doing is: ____________</p>
+<p>  The kind of problem I'm always the one to solve: ____________</p>
+<p>  The skill I have that my title never named: ____________</p>
+<p></code></pre></p>
+
+<h3>Layer 2 — The Identity Audit</h3>
+
+<p>Title is what you were paid to do. Identity is what you <em>are</em>. They're rarely the same, and the gap is usually where you're being underestimated.</p>
+
+<pre><code>  My official title(s): ____________
+<p>  What I actually do all day: ____________</p>
+<p>  What people interrupt me to ask for: ____________</p>
+<p>  The thing I'm proud of that's nowhere on my résumé: ____________</p>
+<p>  The word people use about my work that I'd never pick: ____________</p>
+<p>  The word I'd pick: ____________</p>
+<p></code></pre></p>
+
+<h3>Layer 3 — The Pivot Narrative</h3>
+
+<p>If you're at a turn, the page has to explain the move — without sounding like an apology. The trap is the "I'm reinventing myself!" energy that reads as lost. You're not reinventing. You're continuing. Frame the pivot as the logical next step the through-line was always heading toward.</p>
+
+<pre><code>THE PIVOT FRAME
+<p>  I'm moving from ____________ to ____________.</p>
+
+<p>  The thing those two have in common (the through-line): ___________</p>
+
+<p>  The pivot isn't a break from my story — it's the part where: _______</p>
+
+<p>  What I'm NOT leaving behind (the transferable core): ____________</p>
+<p></code></pre></p>
+
+<h3>Worked example — the full audit</h3>
+
+<pre><code>CAREER through-line:
+<p>  "I keep getting handed broken processes and turning them into</p>
+<p>  systems people actually follow. Did it in ops, did it in product,</p>
+<p>  did it in the nonprofit. Title changed every time. The work didn't."</p>
+
+<p>IDENTITY:</p>
+<p>  Official title: "Senior Program Manager."</p>
+<p>  Actually do: design the system, then get humans to trust it.</p>
+<p>  People interrupt me for: "how do we make this not chaos."</p>
+<p>  Proud of, not on résumé: rewrote onboarding, cut ramp time in half.</p>
+<p>  Word others use: "organized." Word I'd pick: "calm under mess."</p>
+
+<p>PIVOT:</p>
+<p>  Moving from program management to operations consulting.</p>
+<p>  In common: making broken things run without burning people out.</p>
+<p>  The pivot is the part where I do it for many companies, not one.</p>
+<p>  Not leaving behind: the human side. Systems people hate don't work.</p>
+<p></code></pre></p>
+
+<p>Look at what the audit produced. Not a job history — a <em>thesis</em>. "I make broken things run without burning people out." Everything downstream gets written from that line.</p>
+
+<hr>
+
+<h2>Part 2 — The Positioning Statement Builder</h2>
+
+<p>This is the load-bearing sentence. Get it right and the LinkedIn, the bio, the pitch all write themselves from it. Get it wrong and you'll keep producing copy that doesn't quite fit.</p>
+
+<p>A positioning statement isn't a tagline. It's an internal tool — the truest, sharpest version of what you do, for whom, and why it matters. You may never publish it word for word. But everything you publish should be downstream of it.</p>
+
+<h3>The builder</h3>
+
+<pre><code>  I help [SPECIFIC PEOPLE]
+<p>  [DO / GET A SPECIFIC OUTCOME]</p>
+<p>  by [YOUR DISTINCT APPROACH / THE THING ONLY YOU DO],</p>
+<p>  so that [THE DEEPER STAKE — what it really changes for them].</p>
+
+<p>  Unlike [THE DEFAULT ALTERNATIVE], I [THE KEY DIFFERENCE].</p>
+<p></code></pre></p>
+
+<h3>The four tests</h3>
+
+<p>Run your draft through these. Fail one, rewrite.</p>
+
+<ul><li>[ ] <strong>The specific test.</strong> Could a competitor say the exact same sentence? If yes, it's not positioning — it's a category. Sharpen until it's yours alone.</li><li>[ ] <strong>The outcome test.</strong> Does it name what <em>changes</em> for the client, or just what you do? "I write copy" fails. "I make people sound like the smartest version of themselves" passes.</li><li>[ ] <strong>The proof test.</strong> Can you back the claim with one piece of evidence? If not, either find the proof or lower the claim.</li><li>[ ] <strong>The mouth test.</strong> Could you say it out loud to a stranger without cringing? If it only works on paper, it's too stiff.</li></ul>
+
+<h3>Worked example</h3>
+
+<pre><code>  WEAK (category, not position):
+<p>    "I'm an operations consultant who helps companies improve</p>
+<p>    their processes and increase efficiency."</p>
+
+<p>  STRONG (built from the audit thesis):</p>
+<p>    "I help fast-growing teams whose ops have turned to chaos</p>
+<p>    rebuild the systems — without making everyone hate the systems.</p>
+<p>    Most consultants leave you a 40-page playbook nobody opens.</p>
+<p>    I leave you something your team actually uses on a Monday."</p>
+<p></code></pre></p>
+
+<p>Keep this somewhere visible. It's the ruler you measure every other piece of copy against for the rest of the rewrite.</p>
+
+<hr>
+
+<h2>Part 3 — The LinkedIn Rebuild</h2>
+
+<p>LinkedIn is where you're read most and edited least. We rebuild it section by section, top to bottom, each one earning the scroll to the next.</p>
+
+<h3>The Headline</h3>
+
+<p>Not your job title. Your title is in the box below your name already — repeating it wastes the most valuable line on the profile. The headline is the value you create, in language a human searches and a human understands.</p>
+
+<pre><code>  FORMULA A (outcome-led):
+<p>    [What you do for whom] | [proof or specialty] | [optional: status/seeking]</p>
+
+<p>  FORMULA B (identity-led):</p>
+<p>    [The role you want to own] who [the distinct thing you do]</p>
+<p></code></pre></p>
+
+<pre><code>  WEAK:   "Senior Program Manager at Acme Corp"
+<p>  STRONG: "I rebuild the ops that chaos broke — without the 40-page</p>
+<p>           playbook nobody reads | Ops consulting for scaling teams"</p>
+<p></code></pre></p>
+
+<h3>The "About" Section</h3>
+
+<p>This is the heart of the rebuild. LinkedIn truncates after ~3 lines on mobile — so the opening must stand alone and pull the click. Write it in first person. Write it like you talk.</p>
+
+<pre><code>  STRUCTURE:
+<p>  [HOOK — one line that stands alone and earns the "see more" click]</p>
+
+<p>  [THE TURN — what changed, what you saw, why you do this. 2–4 lines.]</p>
+
+<p>  [THE PROOF — specific results. Numbers, names, outcomes. 2–3 lines.]</p>
+
+<p>  [THE NOW — what you're doing today and who it's for. 2–3 lines.]</p>
+
+<p>  [THE ASK — one clear next step. How to reach you / what to do.]</p>
+<p></code></pre></p>
+
+<pre><code>  WORKED EXAMPLE:
+
+<p>  Hook:</p>
+<p>    Every company I've walked into was drowning in its own processes.</p>
+
+<p>  The turn:</p>
+<p>    I used to think the fix was a better tool. It's not. It's a system</p>
+<p>    simple enough that people use it when no one's watching. After a</p>
+<p>    decade of building those inside companies, I started building them</p>
+<p>    for companies — and the difference is in who actually adopts them.</p>
+
+<p>  The proof:</p>
+<p>    At my last role I cut new-hire ramp time from 8 weeks to 4 and</p>
+<p>    killed three redundant approval layers nobody missed. The teams</p>
+<p>    didn't just tolerate the new system. They defended it.</p>
+
+<p>  The now:</p>
+<p>    I work with scaling teams — usually 20 to 100 people — at the point</p>
+<p>    where the duct tape stops holding. We rebuild the core operating</p>
+<p>    systems so growth stops breaking things.</p>
+
+<p>  The ask:</p>
+<p>    If your ops feel like chaos with a calendar, let's talk.</p>
+<p>    DM me or reach me at mkparrish.com.</p>
+<p></code></pre></p>
+
+<h3>The Experience Entries</h3>
+
+<p>Stop pasting the job description. Each entry is a mini-story: the broken thing, what you did, the result. Lead every bullet with a verb and end on proof.</p>
+
+<pre><code>  ENTRY STRUCTURE:
+<p>  [One line of context — what the role/company actually was]</p>
+<p>  • [Strong verb] [specific action] → [measurable result]</p>
+<p>  • [Strong verb] [specific action] → [measurable result]</p>
+<p>  • [Strong verb] [specific action] → [measurable result]</p>
+
+<p>  EXAMPLE:</p>
+<p>  Owned ops for a 60-person SaaS scaling past its processes.</p>
+<p>  • Redesigned onboarding → cut ramp time 8 weeks to 4</p>
+<p>  • Killed 3 redundant approval layers → 30% faster shipping</p>
+<p>  • Built the playbook the next two hires were trained on</p>
+<p></code></pre></p>
+
+<h3>The rest of the profile — quick checklist</h3>
+
+<ul><li>[ ] <strong>Photo:</strong> current, clear, looks like the person who'd show up to the meeting.</li><li>[ ] <strong>Banner:</strong> says or shows what you do — not a stock mountain.</li><li>[ ] <strong>Featured:</strong> 2–4 pieces of real proof — work samples, a post that landed, your site.</li><li>[ ] <strong>Skills:</strong> the ones that match the position you want, not every skill you have.</li><li>[ ] <strong>Custom URL:</strong> linkedin.com/in/yourname — not the auto-generated string.</li><li>[ ] <strong>Open to / Services:</strong> set if you want inbound. Off if you don't.</li></ul>
+
+<hr>
+
+<h2>Part 4 — The Bio Rewrites</h2>
+
+<p>You need your story at multiple lengths. Write the longest first, then cut down — never the reverse, or the short versions come out hollow. All four pull from the same positioning statement, so they sound like one person.</p>
+
+<h3>The 25-word bio (the bottom-of-an-email, the speaker intro)</h3>
+
+<pre><code>  TEMPLATE:
+<p>    [Name] [does the specific valuable thing] for [specific people].</p>
+<p>    [One line of proof or what they're known for].</p>
+
+<p>  EXAMPLE:</p>
+<p>    MK Parrish rewrites the way ambitious people are read on the page —</p>
+<p>    bios, sites, and LinkedIn profiles that finally match the person.</p>
+<p></code></pre></p>
+
+<h3>The 50-word bio (the website "about" blurb, the directory listing)</h3>
+
+<pre><code>  TEMPLATE:
+<p>    [Name] [does the thing] for [people]. [Approach — the distinct how].</p>
+<p>    [Proof line — a result, a name, a number]. [The now / the ask].</p>
+
+<p>  EXAMPLE:</p>
+<p>    Jordan Rivera rebuilds the operations that growth breaks — for teams</p>
+<p>    of 20 to 100 stuck in their own processes. Where most consultants</p>
+<p>    leave a playbook nobody opens, Jordan leaves systems teams actually</p>
+<p>    use. He cut one client's onboarding time in half. He's at jordan.co.</p>
+<p></code></pre></p>
+
+<h3>The 100-word bio (the conference program, the guest-post byline)</h3>
+
+<pre><code>  STRUCTURE:
+<p>    [Lead with the one thing you're known for — not your title.]</p>
+<p>    [The through-line: what you keep doing across roles.]</p>
+<p>    [Two beats of specific proof.]</p>
+<p>    [What you're doing now and who it's for.]</p>
+<p>    [Where to find you.]</p>
+<p></code></pre></p>
+
+<h3>The first-person version (for your own site, your newsletter)</h3>
+
+<p>Same content, but spoken. Contractions. The voice you'd use at the table, not the podium. Take the 50-word bio and rewrite it as "I" — then cut anything that sounds like you're reading it off a card.</p>
+
+<pre><code>  EXAMPLE:
+<p>    I rebuild the operations that growth breaks. I've spent a decade</p>
+<p>    walking into companies drowning in their own processes and leaving</p>
+<p>    them with systems simple enough that people actually use them. I cut</p>
+<p>    one team's onboarding time in half — and they defended the change.</p>
+<p>    Now I do it for scaling teams across the board. Find me at jordan.co.</p>
+<p></code></pre></p>
+
+<hr>
+
+<h2>The Rewrite checklist — before you hit publish</h2>
+
+<ul><li>[ ] Story audit done — you can state your through-line in one sentence</li><li>[ ] Positioning statement passes all four tests</li><li>[ ] Headline sells value, not title</li><li>[ ] "About" hook stands alone and earns the click</li><li>[ ] Every experience bullet ends on proof</li><li>[ ] All four bios trace back to the positioning statement</li><li>[ ] Read the whole profile out loud — sounds like you, not a category</li><li>[ ] One person who knows you read it and said "yes, that's you"</li><li>[ ] Pivot (if any) reads as continuation, never apology</li></ul>
+
+<hr>
+
+<h2>When you want it done for you</h2>
+
+<p>This is the full method. Run it and your page will finally match you.</p>
+
+<p>But here's the honest part: the story audit is the hardest thing to do on yourself. You're inside the story. You can't see which thread is the spine and which is the noise, because you lived all of it and it all feels load-bearing. An outside reader finds the through-line in twenty minutes that you've missed for years.</p>
+
+<p>That's <strong>The Rewrite</strong> — the done-for-you version. We run this whole process together, I find the story you can't see from inside it, and I write the page so it lands. LinkedIn, bios, positioning, the works.</p>
+
+<p>Find it at <strong>mkparrish.com</strong>.</p>
+
+<p>You've been misread long enough. Let's fix the page.</p>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">MK Parrish</div>
+  <p class="footer-legal">© MK Parrish · <a href="https://mkparrish.com">mkparrish.com</a> · All rights reserved</p>
+</div>
+
+</body>
+</html>

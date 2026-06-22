@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Byline Method — MK Parrish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --obsidian: #111111;
+    --carbon: #1A1A1A;
+    --graphite: #2C2C2C;
+    --iron: #4A4A4A;
+    --ash: #7A7A7A;
+    --smoke: #B0B0B0;
+    --pearl: #F0F0EE;
+    --white: #FAFAF8;
+    --blush: #FFD6E4;
+    --petal: #F2AFC6;
+    --rose: #E0869F;
+    --carmine: #C75B78;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    /* Reusable gray → pink gradients */
+    --grad-pink: linear-gradient(120deg, var(--rose), var(--petal) 55%, var(--blush));
+    --grad-rule: linear-gradient(90deg, transparent, var(--petal), transparent);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(242,175,198,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(199,91,120,0.05), transparent 55%),
+      linear-gradient(180deg, var(--obsidian) 0%, var(--void) 38%);
+    background-attachment: fixed;
+    color: var(--pearl);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.78;
+    position: relative;
+  }
+  /* Grain overlay — the site's signature texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: screen;
+  }
+  ::selection { background: var(--petal); color: var(--void); }
+
+  /* ── COVER ─────────────────────────────────────────── */
+  .cover {
+    position: relative;
+    background: var(--obsidian);
+    border-bottom: 1px solid var(--graphite);
+    padding: 104px 48px 84px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% -10%, rgba(242,175,198,0.20) 0%, transparent 62%),
+      radial-gradient(ellipse 50% 50% at 88% 108%, rgba(199,91,120,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, rgba(176,176,176,0.06), transparent 45%);
+    pointer-events: none;
+  }
+  /* Thin gray→pink gradient hairline across the very top */
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--iron), var(--petal) 50%, var(--blush));
+    opacity: 0.7;
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: var(--petal);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7.5vw, 4.6rem);
+    letter-spacing: 0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    color: var(--white);
+  }
+  /* Soft gray→white→pink gradient fill on the lead words */
+  .cover h1 .grad {
+    background: linear-gradient(135deg, var(--pearl) 0%, var(--pearl) 50%, var(--blush) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pearl);
+    filter: drop-shadow(0 0 16px rgba(242,175,198,0.14));
+  }
+  .cover h1 .outline {
+    -webkit-text-stroke: 1px rgba(242,175,198,0.5);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Subtitle — matches the live site tagline: Playfair italic, petal */
+  .cover .subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color: rgba(242, 175, 198, 0.8);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .cover-rule {
+    width: 90px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--petal), var(--blush), transparent);
+  }
+  .cover-meta {
+    margin-top: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+
+  /* ── CONTENT ───────────────────────────────────────── */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    counter-reset: section;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
+    color: var(--pearl);
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+
+  /* Section headings get an editorial mono counter, like the site's section numbers */
+  h2 {
+    counter-increment: section;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.3vw, 1.95rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pearl);
+    margin: 68px 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--graphite);
+    position: relative;
+  }
+  h2::before {
+    content: counter(section, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, var(--rose), var(--petal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--petal);
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--petal), rgba(242,175,198,0));
+  }
+  /* Sub-section labels — live-site accent: Playfair italic, petal */
+  h3 {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--petal);
+    margin: 40px 0 12px;
+  }
+  p { margin: 0 0 1.25em; color: var(--smoke); }
+  strong { color: var(--pearl); font-weight: 500; }
+  /* Emphasis — live-site accent: Playfair italic, petal */
+  em { font-family: var(--font-serif); font-style: italic; color: var(--petal); }
+  a { color: var(--petal); text-decoration: none; }
+  a:hover { color: var(--blush); text-decoration: underline; }
+
+  ul, ol { padding-left: 1.4em; margin: 0 0 1.6em; color: var(--smoke); }
+  li { margin-bottom: 0.55em; padding-left: 0.35em; }
+  ul li::marker { color: var(--petal); }
+  ol li::marker { color: var(--petal); font-family: var(--font-mono); font-size: 0.85em; }
+
+  blockquote {
+    position: relative;
+    border-left: 2px solid var(--petal);
+    margin: 40px 0;
+    padding: 26px 30px 26px 40px;
+    background: linear-gradient(110deg, rgba(242,175,198,0.10), rgba(176,176,176,0.04) 55%, transparent 90%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.08rem;
+    color: rgba(242, 175, 198, 0.9);
+    line-height: 1.6;
+  }
+  blockquote::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.08em;
+    left: 0.14em;
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(242,175,198,0.22);
+    pointer-events: none;
+  }
+
+  pre {
+    background: var(--carbon);
+    border: 1px solid var(--graphite);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  code { font-family: var(--font-mono); font-size: 0.86rem; color: var(--petal); white-space: pre; }
+  p > code, li > code {
+    background: var(--carbon);
+    padding: 2px 6px;
+    font-size: 0.82em;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 0.9rem; }
+  thead tr { background: linear-gradient(90deg, rgba(242,175,198,0.12), rgba(176,176,176,0.04) 70%, transparent); }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--petal);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--graphite); color: var(--smoke); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--iron) 25%, var(--petal) 50%, var(--iron) 75%, transparent);
+    opacity: 0.6;
+    margin: 52px 0;
+  }
+
+  /* ── FOOTER ────────────────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--graphite);
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--obsidian);
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-legal {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+  .footer-legal a { color: var(--ash); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PRINT EDITION — light, publisher-style layout for the PDF.
+     The screen stays dark; the printed book inverts to a white page
+     with black header boxes and pink/white titles.
+     ═══════════════════════════════════════════════════════════════ */
+  @media print {
+    /* Uniform book margins on every page (Puppeteer's margin is set to 0 so
+       these @page margins are the single source of truth). */
+    @page { margin: 0.8in; }
+
+    html, body {
+      background: #ffffff !important;
+      color: #232323 !important;
+    }
+    body::before { display: none !important; }   /* no grain in print */
+
+    /* ── COVER: a full black title page within the white margins ── */
+    .cover {
+      background: #ffffff !important;
+      border-bottom: none;
+      padding: 0;
+      break-after: page;
+    }
+    .cover::before, .cover::after { display: none !important; }
+    .cover-inner {
+      box-sizing: border-box;
+      min-height: 9.3in;          /* fills the Letter text area (11in − 2×0.8in) */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 64px;
+      background: #0E0E0E;
+      border: 1px solid rgba(242, 175, 198, 0.45);
+    }
+    .cover-kicker { color: var(--petal); }
+    .cover h1 { color: #ffffff; }
+    .cover h1 .grad {
+      background: linear-gradient(135deg, #ffffff 0%, #ffffff 46%, var(--blush) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: #ffffff;
+      filter: none;
+    }
+    .cover h1 .outline {
+      -webkit-text-stroke: 1px var(--petal);
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .cover .subtitle { color: var(--petal); }
+    .cover-meta { color: #8a8a8a; }
+
+    /* ── BODY: black text on white, filling the page margins so header
+       boxes align flush with the body text block ── */
+    .content { max-width: none; margin: 0; padding: 0; color: #232323; }
+    p { color: #2b2b2b; }
+    strong { color: #0A0A0A; }
+    a { color: #B23A59; }
+    ul li::marker, ol li::marker { color: #B23A59; }
+
+    /* ── SECTION HEADERS: black boxes, pink number + white title ── */
+    h2 {
+      background: #0E0E0E;
+      color: #ffffff;
+      padding: 20px 26px;
+      margin: 46px 0 30px;
+      border: none;
+    }
+    h2::before {
+      background: none;
+      -webkit-text-fill-color: var(--petal);
+      color: var(--petal);
+      margin-bottom: 10px;
+    }
+    h2::after { display: none; }
+
+    /* Sub-labels and emphasis in a print-legible pink */
+    h3 { color: #B23A59; }
+    em { color: #B23A59; }
+
+    /* ── PULL QUOTES: soft panel, pink rule + mark, dark text ── */
+    blockquote {
+      background: #F5F2F0;
+      border-left: 3px solid #B23A59;
+      color: #232323;
+    }
+    blockquote::before { color: rgba(178, 58, 89, 0.3); }
+
+    /* ── TABLES: black header band ── */
+    thead tr { background: #0E0E0E; }
+    th { color: #ffffff; border-bottom: 1px solid #0E0E0E; }
+    td { color: #2b2b2b; border-bottom: 1px solid #e3e3e3; }
+
+    /* ── CODE: light chip ── */
+    pre { background: #f3f3f1; border: 1px solid #e3e3e3; }
+    pre code { color: #A8344F; }
+    p > code, li > code { background: #f0eeec; color: #A8344F; }
+
+    hr {
+      background: linear-gradient(90deg, transparent, #cfcfcf 25%, #B23A59 50%, #cfcfcf 75%, transparent);
+      opacity: 1;
+    }
+
+    /* ── FOOTER: white page, black signature ── */
+    .footer { background: #ffffff; border-top: 1px solid #dddddd; }
+    .footer-logo { color: #0A0A0A; }
+    .footer-legal { color: #8a8a8a; }
+    .footer-legal a { color: #B23A59; }
+
+    /* ── PAGINATION — natural flow; just avoid bad breaks ── */
+    h1, h2, h3 { break-after: avoid-page; break-inside: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    h2, h3, li, tr, blockquote, pre, table, figure, img { break-inside: avoid; }
+    ul, ol { break-before: avoid-page; }
+    .footer { break-before: avoid-page; }
+  }
+  *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-kicker">MK Parrish · mkparrish.com</div>
+    <h1><span class="grad">The Byline</span> <span class="outline">Method</span></h1>
+    
+    <div class="cover-rule"></div>
+    
+  </div>
+</div>
+
+<div class="content">
+
+<h3>The voice capture and ghostwriting framework — documented for the first time.</h3>
+
+<p><strong>By MK Parrish</strong></p>
+<p><strong>Price: $38</strong></p>
+
+<hr>
+
+<h2>Why this exists</h2>
+
+<p>Ghostwriting that works doesn't sound ghostwritten. It sounds like the person — on their best day, with an editor in their head. Most ghostwriting fails at exactly this point. It's competent and generic. It could be anyone. And the moment a reader thinks "this doesn't sound like them," the trust is gone.</p>
+
+<p>The whole craft hinges on one thing nobody documents: how you <em>capture a voice</em> and then <em>write inside it</em> so faithfully that the person reads their own piece and says "that's exactly what I would have said — I just couldn't get it out."</p>
+
+<p>The Byline is my done-for-you ghostwriting service. This is the method underneath it, written down for the first time. Use it to ghostwrite for someone else — a founder, an exec, a client. Or use it on <em>yourself</em>: to capture your own voice on a good day and write in it even when you're tired, rushed, or staring at a blank page.</p>
+
+<p>The method runs in four parts: capture the voice, calibrate it across formats, write inside it, and keep the engine running with an editorial calendar. Start with capture — everything downstream depends on a voice you've actually pinned down.</p>
+
+<hr>
+
+<h2>Part 1 — The Voice-Capture Interview</h2>
+
+<p>Voice doesn't live in a style guide. It lives in how a person actually talks when they forget they're being recorded. The interview's whole job is to get them talking like that, then mine the recording for the patterns.</p>
+
+<p>Record it. Always. You're not listening for content — you're listening for <em>how they say things</em>. The transcript is the raw material.</p>
+
+<h3>The interview questions</h3>
+
+<p>Ask these in order. Let them ramble. The gold is usually in the tangent, not the answer.</p>
+
+<pre><code>WARM-UP (get them talking naturally)
+<p>  - Tell me what you do, like you're explaining it to a friend at dinner.</p>
+<p>  - What's something in your field everyone believes that you think</p>
+<p>    is wrong?</p>
+<p>  - What gets you fired up enough to rant about it?</p>
+
+<p>VOICE PATTERNS (mine the how)</p>
+<p>  - What's a phrase you say all the time? Be honest, even if it's a tic.</p>
+<p>  - When you're explaining something hard, what do you compare it to?</p>
+<p>  - Are you a "let me be blunt" person or a "let me think out loud"</p>
+<p>    person?</p>
+
+<p>POINT OF VIEW (the spine of every piece)</p>
+<p>  - What's the hill you'll die on professionally?</p>
+<p>  - What advice do you give that people don't want to hear?</p>
+<p>  - What would you never say, even if it polled well?</p>
+
+<p>STORIES (the proof and the texture)</p>
+<p>  - Tell me about a time you were completely wrong about something.</p>
+<p>  - What's the story you tell most often? Why that one?</p>
+<p>  - Who's the reader you're really writing for? Picture one person.</p>
+<p></code></pre></p>
+
+<h3>The voice profile — what to extract</h3>
+
+<p>After the interview, fill this from the transcript. This becomes the reference sheet you write against.</p>
+
+<pre><code>  CADENCE: [short and punchy? long and winding? mixed?]
+<p>  GO-TO PHRASES: [the actual words they repeat]</p>
+<p>  SENTENCE OPENERS THEY USE: [e.g. "Look," "Here's the thing," "Honestly"]</p>
+<p>  HUMOR: [dry? warm? none? self-deprecating?]</p>
+<p>  FORMALITY: [contractions? slang? swears? buttoned-up?]</p>
+<p>  METAPHOR SOURCE: [sports? cooking? machines? nature?]</p>
+<p>  HARD NO'S: [words/moves they'd never make]</p>
+<p>  THE POV: [the consistent point of view across answers]</p>
+<p>  THE READER: [the one person they picture]</p>
+<p></code></pre></p>
+
+<h3>Worked example — extracted profile</h3>
+
+<pre><code>  CADENCE: short, declarative, then one long aside. Talks in punches.
+<p>  GO-TO PHRASES: "at the end of the day," "look," "that's the whole game"</p>
+<p>  OPENERS: "Look," "Here's what nobody tells you," "Real talk —"</p>
+<p>  HUMOR: dry, self-deprecating, occasional mild swear.</p>
+<p>  FORMALITY: heavy contractions, conversational, will say "damn."</p>
+<p>  METAPHOR SOURCE: poker and cooking.</p>
+<p>  HARD NO'S: "synergy," "thought leader," anything that sounds like</p>
+<p>  a LinkedIn guru. Won't humblebrag.</p>
+<p>  POV: "Most advice is for people who already made it. I write for</p>
+<p>  the ones still figuring it out."</p>
+<p>  READER: a 28-year-old freelancer one client away from quitting.</p>
+<p></code></pre></p>
+
+<p>That profile is enough to write a hundred pieces that sound like this person. Without it, you're guessing.</p>
+
+<hr>
+
+<h2>Part 2 — The Tone Calibration Guide (across formats)</h2>
+
+<p>Voice is constant. <em>Tone</em> shifts by format. The same person writes a LinkedIn post and a keynote and a client email differently — but it's still recognizably them. The skill is dialing tone up or down without losing the voice.</p>
+
+<h3>The calibration table</h3>
+
+<table><thead><tr><th>Format</th><th>Tone dial</th><th>Length</th><th>Opening move</th><th>What stays constant</th></tr></thead><tbody><tr><td>LinkedIn post</td><td>punchy, opinionated</td><td>short</td><td>hook line, stands alone</td><td>the POV, go-to phrases</td></tr>
+<tr><td>Newsletter</td><td>warm, generous</td><td>medium</td><td>"you" focused, a story</td><td>cadence, humor</td></tr>
+<tr><td>Keynote / talk</td><td>bold, performative</td><td>spoken</td><td>a question or a claim</td><td>the hill they die on</td></tr>
+<tr><td>Client email</td><td>direct, warm</td><td>tight</td><td>the ask up front</td><td>contractions, plainness</td></tr>
+<tr><td>Long essay</td><td>reflective, layered</td><td>long</td><td>a tension or a confession</td><td>the POV, the reader</td></tr>
+<tr><td>Bio / profile</td><td>confident, compressed</td><td>very short</td><td>the one known-for thing</td><td>no humblebrag</td></tr></tbody></table>
+
+<h3>The rule</h3>
+
+<p>Whatever the format, three things never move: <strong>the point of view, the go-to cadence, and the hard no's.</strong> Tone can flex loud or quiet. Those three are load-bearing — drop them and the voice breaks.</p>
+
+<h3>Worked example — one idea, three formats, one voice</h3>
+
+<pre><code>THE IDEA: "Stop waiting until you're ready. You learn by shipping."
+
+<p>LINKEDIN (punchy):</p>
+<p>  Look — you're not going to feel ready. That feeling doesn't show up.</p>
+<p>  You learn the job by doing the job badly first. Ship the ugly version.</p>
+<p>  That's the whole game.</p>
+
+<p>NEWSLETTER (warm):</p>
+<p>  Here's what nobody tells you when you start: the readiness never</p>
+<p>  arrives. I waited two years to "feel ready" to freelance. You know</p>
+<p>  what finally worked? Sending one bad pitch. Then another. You don't</p>
+<p>  think your way in — you ship your way in.</p>
+
+<p>KEYNOTE (bold, spoken):</p>
+<p>  Raise your hand if you're waiting to feel ready. Keep it up. Now —</p>
+<p>  that feeling? It's not coming. I'm sorry. You learn this by doing</p>
+<p>  it badly in public first. So let's talk about how to ship ugly.</p>
+<p></code></pre></p>
+
+<p>Same person every time. The "Look," the poker-flat cadence, the "that's the whole game" — all constant. Only the tone dial moved.</p>
+
+<hr>
+
+<h2>Part 3 — The Writing-in-Voice Framework</h2>
+
+<p>Now you write. With the voice profile beside you, a draft becomes a controlled act, not a guess. Run this loop for any piece.</p>
+
+<h3>The loop</h3>
+
+<pre><code>  1. PICK THE POV ANGLE
+<p>     What does THIS person uniquely think about the topic?</p>
+<p>     (Pull from the "hill they die on.") Not the topic — their take.</p>
+
+<p>  2. WRITE THE HOOK IN THEIR OPENER</p>
+<p>     Start with one of their actual sentence openers. Earn line two.</p>
+
+<p>  3. DRAFT FAST, IN CADENCE</p>
+<p>     Match their rhythm — short/long, punchy/winding. Don't edit yet.</p>
+<p>     If they talk in punches, write in punches.</p>
+
+<p>  4. SALT IN THE GO-TO PHRASES</p>
+<p>     Drop in 1-2 of their real phrases. Not every line — that's parody.</p>
+<p>     Just enough that an ear recognizes them.</p>
+
+<p>  5. RUN THE HARD-NO PASS</p>
+<p>     Delete anything on their banned list. This is where most</p>
+<p>     ghostwriting gets caught — one "synergy" and it's blown.</p>
+
+<p>  6. THE MOUTH TEST</p>
+<p>     Read it aloud as them. Would they actually say this sentence?</p>
+<p>     Any line that fails, rewrite until it passes.</p>
+<p></code></pre></p>
+
+<h3>The "is it them?" checklist</h3>
+
+<ul><li>[ ] Opens in one of their real openers</li><li>[ ] Cadence matches the profile (punchy/winding/mixed)</li><li>[ ] 1-2 go-to phrases present, not overdone</li><li>[ ] The POV is clearly <em>theirs</em>, not generic best-practice</li><li>[ ] Zero banned words or moves</li><li>[ ] Humor level matches (no jokes if they're dry; no stiffness if warm)</li><li>[ ] Read aloud as them — every line passes the mouth test</li><li>[ ] A person who knows them would say "yeah, that's them"</li></ul>
+
+<h3>Worked example — same draft, fixed</h3>
+
+<pre><code>  GENERIC DRAFT (correct, but anyone could've written it):
+<p>    "It's important to take action even when you don't feel fully</p>
+<p>    prepared. Progress comes from doing, not waiting. Many successful</p>
+<p>    people started before they were ready."</p>
+
+<p>  IN-VOICE REWRITE (profile applied):</p>
+<p>    "Look — you're not going to feel ready. I waited two years for that</p>
+<p>    feeling and it never showed. You learn this by doing it badly first.</p>
+<p>    Ship the ugly version. That's the whole game."</p>
+<p></code></pre></p>
+
+<p>The first is a fortune cookie. The second is a specific human with a poker habit and a chip on their shoulder. Same advice. Only one has a pulse.</p>
+
+<hr>
+
+<h2>Part 4 — The Editorial Calendar</h2>
+
+<p>A voice is only worth capturing if you use it on a schedule. Sporadic genius loses to consistent presence. Here are the templates to keep the engine running.</p>
+
+<h3>The content pillars</h3>
+
+<p>Pick 3-4 themes the person owns. Everything they publish ladders to one.</p>
+
+<pre><code>  PILLAR 1: ____________ (their core POV)
+<p>  PILLAR 2: ____________ (a recurring topic they're known for)</p>
+<p>  PILLAR 3: ____________ (the contrarian / spicy one)</p>
+<p>  PILLAR 4: ____________ (the human / behind-the-scenes one)</p>
+<p></code></pre></p>
+
+<h3>The weekly calendar template</h3>
+
+<pre><code>  WEEK OF: __________
+
+<p>  | Day | Format    | Pillar | Working title         | Status |</p>
+<p>  |-----|-----------|--------|-----------------------|--------|</p>
+<p>  | Mon | LinkedIn  |        |                       |        |</p>
+<p>  | Wed | Newsletter|        |                       |        |</p>
+<p>  | Fri | LinkedIn  |        |                       |        |</p>
+<p></code></pre></p>
+
+<h3>The idea bank</h3>
+
+<p>Never write from a blank page. Keep a running list, pulled straight from the interview transcript.</p>
+
+<pre><code>  - Rants they went on (each = a post)
+<p>  - Stories they told (each = a post or essay)</p>
+<p>  - "What nobody tells you about ___" (one per pillar)</p>
+<p>  - Hot takes / hills they'll die on</p>
+<p>  - Questions readers actually ask them</p>
+<p></code></pre></p>
+
+<h3>Worked example — a month, mapped</h3>
+
+<pre><code>  PILLARS: (1) ship before ready (2) freelance pricing
+<p>           (3) why "thought leader" advice is broken (4) my own misses</p>
+
+<p>  | Week | Mon (LI)              | Wed (News)            | Fri (LI)        |</p>
+<p>  |------|-----------------------|-----------------------|-----------------|</p>
+<p>  | 1    | Ship ugly (P1)        | The 2-yr wait story   | Pricing myth(P2)|</p>
+<p>  | 2    | Guru advice fails(P3) | What I got wrong (P4) | Ship ugly pt2   |</p>
+<p>  | 3    | Raise your rates (P2) | A reader's question   | Hot take (P3)   |</p>
+<p>  | 4    | My worst pitch (P4)   | Pricing breakdown(P2) | Recap / best-of |</p>
+<p></code></pre></p>
+
+<p>Every cell traces to a pillar, and every pillar traces to the interview. The calendar writes itself once the voice is captured.</p>
+
+<hr>
+
+<h2>The Byline method — one-page recap</h2>
+
+<pre><code>  1. CAPTURE — interview, record, extract the voice profile
+<p>  2. CALIBRATE — flex tone by format, keep POV + cadence + no's fixed</p>
+<p>  3. WRITE — POV angle → their opener → cadence → phrases → no-pass → mouth test</p>
+<p>  4. SUSTAIN — pillars + weekly calendar + idea bank from the transcript</p>
+<p></code></pre></p>
+
+<hr>
+
+<h2>When you want it done for you</h2>
+
+<p>This is the method. Run it and you can write in a voice — yours or someone else's — that actually sounds like the person.</p>
+
+<p>But capturing a voice and writing inside it for months is a craft <em>and</em> a time sink. The interview is the easy part. The hard part is the discipline: staying in voice across fifty pieces, never letting one "synergy" slip through, keeping the calendar full when the person is busy running their actual business. That's a job.</p>
+
+<p>That's <strong>The Byline</strong> — the done-for-you version. I run the capture interview, build the voice profile, and ghostwrite on a calendar so the person shows up consistently, sounding exactly like themselves, without writing a word.</p>
+
+<p>Find it at <strong>mkparrish.com</strong>.</p>
+
+<p>It should sound like you. Let's make sure it does.</p>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">MK Parrish</div>
+  <p class="footer-legal">© MK Parrish · <a href="https://mkparrish.com">mkparrish.com</a> · All rights reserved</p>
+</div>
+
+</body>
+</html>

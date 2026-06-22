@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Write Yourself Into the Room — MK Parrish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --obsidian: #111111;
+    --carbon: #1A1A1A;
+    --graphite: #2C2C2C;
+    --iron: #4A4A4A;
+    --ash: #7A7A7A;
+    --smoke: #B0B0B0;
+    --pearl: #F0F0EE;
+    --white: #FAFAF8;
+    --blush: #FFD6E4;
+    --petal: #F2AFC6;
+    --rose: #E0869F;
+    --carmine: #C75B78;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    /* Reusable gray → pink gradients */
+    --grad-pink: linear-gradient(120deg, var(--rose), var(--petal) 55%, var(--blush));
+    --grad-rule: linear-gradient(90deg, transparent, var(--petal), transparent);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(242,175,198,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(199,91,120,0.05), transparent 55%),
+      linear-gradient(180deg, var(--obsidian) 0%, var(--void) 38%);
+    background-attachment: fixed;
+    color: var(--pearl);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.78;
+    position: relative;
+  }
+  /* Grain overlay — the site's signature texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: screen;
+  }
+  ::selection { background: var(--petal); color: var(--void); }
+
+  /* ── COVER ─────────────────────────────────────────── */
+  .cover {
+    position: relative;
+    background: var(--obsidian);
+    border-bottom: 1px solid var(--graphite);
+    padding: 104px 48px 84px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% -10%, rgba(242,175,198,0.20) 0%, transparent 62%),
+      radial-gradient(ellipse 50% 50% at 88% 108%, rgba(199,91,120,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, rgba(176,176,176,0.06), transparent 45%);
+    pointer-events: none;
+  }
+  /* Thin gray→pink gradient hairline across the very top */
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--iron), var(--petal) 50%, var(--blush));
+    opacity: 0.7;
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: var(--petal);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7.5vw, 4.6rem);
+    letter-spacing: 0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    color: var(--white);
+  }
+  /* Soft gray→white→pink gradient fill on the lead words */
+  .cover h1 .grad {
+    background: linear-gradient(135deg, var(--pearl) 0%, var(--pearl) 50%, var(--blush) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pearl);
+    filter: drop-shadow(0 0 16px rgba(242,175,198,0.14));
+  }
+  .cover h1 .outline {
+    -webkit-text-stroke: 1px rgba(242,175,198,0.5);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Subtitle — matches the live site tagline: Playfair italic, petal */
+  .cover .subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color: rgba(242, 175, 198, 0.8);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .cover-rule {
+    width: 90px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--petal), var(--blush), transparent);
+  }
+  .cover-meta {
+    margin-top: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+
+  /* ── CONTENT ───────────────────────────────────────── */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    counter-reset: section;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
+    color: var(--pearl);
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+
+  /* Section headings get an editorial mono counter, like the site's section numbers */
+  h2 {
+    counter-increment: section;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.3vw, 1.95rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pearl);
+    margin: 68px 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--graphite);
+    position: relative;
+  }
+  h2::before {
+    content: counter(section, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, var(--rose), var(--petal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--petal);
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--petal), rgba(242,175,198,0));
+  }
+  /* Sub-section labels — live-site accent: Playfair italic, petal */
+  h3 {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--petal);
+    margin: 40px 0 12px;
+  }
+  p { margin: 0 0 1.25em; color: var(--smoke); }
+  strong { color: var(--pearl); font-weight: 500; }
+  /* Emphasis — live-site accent: Playfair italic, petal */
+  em { font-family: var(--font-serif); font-style: italic; color: var(--petal); }
+  a { color: var(--petal); text-decoration: none; }
+  a:hover { color: var(--blush); text-decoration: underline; }
+
+  ul, ol { padding-left: 1.4em; margin: 0 0 1.6em; color: var(--smoke); }
+  li { margin-bottom: 0.55em; padding-left: 0.35em; }
+  ul li::marker { color: var(--petal); }
+  ol li::marker { color: var(--petal); font-family: var(--font-mono); font-size: 0.85em; }
+
+  blockquote {
+    position: relative;
+    border-left: 2px solid var(--petal);
+    margin: 40px 0;
+    padding: 26px 30px 26px 40px;
+    background: linear-gradient(110deg, rgba(242,175,198,0.10), rgba(176,176,176,0.04) 55%, transparent 90%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.08rem;
+    color: rgba(242, 175, 198, 0.9);
+    line-height: 1.6;
+  }
+  blockquote::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.08em;
+    left: 0.14em;
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(242,175,198,0.22);
+    pointer-events: none;
+  }
+
+  pre {
+    background: var(--carbon);
+    border: 1px solid var(--graphite);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  code { font-family: var(--font-mono); font-size: 0.86rem; color: var(--petal); white-space: pre; }
+  p > code, li > code {
+    background: var(--carbon);
+    padding: 2px 6px;
+    font-size: 0.82em;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 0.9rem; }
+  thead tr { background: linear-gradient(90deg, rgba(242,175,198,0.12), rgba(176,176,176,0.04) 70%, transparent); }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--petal);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--graphite); color: var(--smoke); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--iron) 25%, var(--petal) 50%, var(--iron) 75%, transparent);
+    opacity: 0.6;
+    margin: 52px 0;
+  }
+
+  /* ── FOOTER ────────────────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--graphite);
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--obsidian);
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-legal {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+  .footer-legal a { color: var(--ash); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PRINT EDITION — light, publisher-style layout for the PDF.
+     The screen stays dark; the printed book inverts to a white page
+     with black header boxes and pink/white titles.
+     ═══════════════════════════════════════════════════════════════ */
+  @media print {
+    /* Uniform book margins on every page (Puppeteer's margin is set to 0 so
+       these @page margins are the single source of truth). */
+    @page { margin: 0.8in; }
+
+    html, body {
+      background: #ffffff !important;
+      color: #232323 !important;
+    }
+    body::before { display: none !important; }   /* no grain in print */
+
+    /* ── COVER: a full black title page within the white margins ── */
+    .cover {
+      background: #ffffff !important;
+      border-bottom: none;
+      padding: 0;
+      break-after: page;
+    }
+    .cover::before, .cover::after { display: none !important; }
+    .cover-inner {
+      box-sizing: border-box;
+      min-height: 9.3in;          /* fills the Letter text area (11in − 2×0.8in) */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 64px;
+      background: #0E0E0E;
+      border: 1px solid rgba(242, 175, 198, 0.45);
+    }
+    .cover-kicker { color: var(--petal); }
+    .cover h1 { color: #ffffff; }
+    .cover h1 .grad {
+      background: linear-gradient(135deg, #ffffff 0%, #ffffff 46%, var(--blush) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: #ffffff;
+      filter: none;
+    }
+    .cover h1 .outline {
+      -webkit-text-stroke: 1px var(--petal);
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .cover .subtitle { color: var(--petal); }
+    .cover-meta { color: #8a8a8a; }
+
+    /* ── BODY: black text on white, filling the page margins so header
+       boxes align flush with the body text block ── */
+    .content { max-width: none; margin: 0; padding: 0; color: #232323; }
+    p { color: #2b2b2b; }
+    strong { color: #0A0A0A; }
+    a { color: #B23A59; }
+    ul li::marker, ol li::marker { color: #B23A59; }
+
+    /* ── SECTION HEADERS: black boxes, pink number + white title ── */
+    h2 {
+      background: #0E0E0E;
+      color: #ffffff;
+      padding: 20px 26px;
+      margin: 46px 0 30px;
+      border: none;
+    }
+    h2::before {
+      background: none;
+      -webkit-text-fill-color: var(--petal);
+      color: var(--petal);
+      margin-bottom: 10px;
+    }
+    h2::after { display: none; }
+
+    /* Sub-labels and emphasis in a print-legible pink */
+    h3 { color: #B23A59; }
+    em { color: #B23A59; }
+
+    /* ── PULL QUOTES: soft panel, pink rule + mark, dark text ── */
+    blockquote {
+      background: #F5F2F0;
+      border-left: 3px solid #B23A59;
+      color: #232323;
+    }
+    blockquote::before { color: rgba(178, 58, 89, 0.3); }
+
+    /* ── TABLES: black header band ── */
+    thead tr { background: #0E0E0E; }
+    th { color: #ffffff; border-bottom: 1px solid #0E0E0E; }
+    td { color: #2b2b2b; border-bottom: 1px solid #e3e3e3; }
+
+    /* ── CODE: light chip ── */
+    pre { background: #f3f3f1; border: 1px solid #e3e3e3; }
+    pre code { color: #A8344F; }
+    p > code, li > code { background: #f0eeec; color: #A8344F; }
+
+    hr {
+      background: linear-gradient(90deg, transparent, #cfcfcf 25%, #B23A59 50%, #cfcfcf 75%, transparent);
+      opacity: 1;
+    }
+
+    /* ── FOOTER: white page, black signature ── */
+    .footer { background: #ffffff; border-top: 1px solid #dddddd; }
+    .footer-logo { color: #0A0A0A; }
+    .footer-legal { color: #8a8a8a; }
+    .footer-legal a { color: #B23A59; }
+
+    /* ── PAGINATION — natural flow; just avoid bad breaks ── */
+    h1, h2, h3 { break-after: avoid-page; break-inside: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    h2, h3, li, tr, blockquote, pre, table, figure, img { break-inside: avoid; }
+    ul, ol { break-before: avoid-page; }
+    .footer { break-before: avoid-page; }
+  }
+  *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-kicker">MK Parrish · mkparrish.com</div>
+    <h1><span class="grad">Write Yourself Into the</span> <span class="outline">Room</span></h1>
+    
+    <div class="cover-rule"></div>
+    
+  </div>
+</div>
+
+<div class="content">
+
+<h3>The personal brand writing guide for people tired of sounding like everyone else.</h3>
+
+<p><strong>By MK Parrish</strong></p>
+
+<p><strong>$28</strong></p>
+
+<hr>
+
+<h2>Intro: The Room You Keep Getting Left Out Of</h2>
+
+<p>There's a room you want to be in. A client roster, an investor's shortlist, a curated panel, a feed where the people you admire actually read your stuff. And you keep getting left just outside the door — not because you lack the goods, but because your words don't carry them.</p>
+
+<p>Here's the hard part nobody says out loud: the people in that room are not always more qualified than you. They're more <em>legible</em>. They've written themselves in clear, specific language while you've been hiding behind "results-driven professional passionate about leveraging synergies." You've made yourself unmemorable on purpose, because blandness feels safe. It isn't. Blandness is how qualified people stay invisible.</p>
+
+<p>This guide is about fixing that with words. Not louder words — sharper ones. We'll cover a three-layer positioning framework, bio templates with real before-and-afters, and a LinkedIn audit you can run today. Every framework comes with examples, because positioning advice without examples is just a horoscope.</p>
+
+<blockquote>You don't get into the room by being the loudest. You get in by being the clearest person they've read all week.</blockquote>
+
+<p>Pen up. Let's write you in.</p>
+
+<hr>
+
+<h2>Chapter One: Why You Sound Like Everyone Else</h2>
+
+<p>You sound like everyone else because you learned to write from everyone else.</p>
+
+<p>You absorbed the LinkedIn dialect — "thought leader," "I'm humbled to announce," "passionate about driving impact" — and mistook it for professionalism. It's not professionalism. It's camouflage. And camouflage works exactly backwards from what you want: it makes you blend into a landscape of identical profiles, all reciting the same dead phrases.</p>
+
+<p>The root problem is fear dressed as polish. Specificity feels risky. If you say exactly what you do and who you're for, you might exclude someone. So you hedge. You generalize. You write "I help businesses grow" instead of "I help bootstrapped B2B founders write sales pages that don't sound like a robot wrote them." The first offends no one and attracts no one. The second is a magnet.</p>
+
+<p>Generic writing is a decision to be forgettable in exchange for being safe. The whole rest of this book is an argument for making the opposite trade.</p>
+
+<blockquote>Vagueness is not humility. It's a failure to decide who you are out loud.</blockquote>
+
+<hr>
+
+<h2>Chapter Two: The Three-Layer Positioning Framework</h2>
+
+<p>Strong personal positioning isn't a tagline. It's three layers stacked, each answering a different question. Get all three and your writing has a spine. Skip one and you sound like everyone else.</p>
+
+<h3>Layer One: The Category — <em>What am I?</em></h3>
+
+<p>The plainest possible label for what you do. Not clever yet — clear. "Copywriter." "Fractional CFO." "Pediatric sleep coach." This is the shelf you live on. People can't reach for you if they don't know which shelf to look on.</p>
+
+<p>The mistake: skipping straight to clever. "Word alchemist" tells me nothing. Earn the cleverness in Layer Three. Layer One is load-bearing; keep it boring and true.</p>
+
+<h3>Layer Two: The Specific — <em>Who exactly, and what exactly?</em></h3>
+
+<p>This is where most people quit too early. Layer Two narrows the category until it's unmistakably you. Who's your person? What's the precise outcome? What do you do that the average member of your category doesn't?</p>
+
+<ul><li>Generic: "Copywriter for businesses."</li><li>Layer Two: "Copywriter for wellness founders who are sick of sounding clinical and want to sound like a human who actually cares."</li></ul>
+
+<p>Narrowing feels like shrinking your market. It's the opposite. The more specific you are, the more the right person feels <em>that's me</em> and the more they'll pay. Precision is premium.</p>
+
+<h3>Layer Three: The Edge — <em>Why me and not the other one?</em></h3>
+
+<p>Your point of view. The belief that puts daylight between you and the next person with the same skills. This is where voice and conviction live. What do you believe about your work that not everyone in your field agrees with?</p>
+
+<ul><li>"I think most brand voice work fails because it decorates instead of deciding. I make brands choose who they are, then write from it."</li></ul>
+
+<p>That's a stance. Stances are sticky. People remember the person who believes something over the person who lists services.</p>
+
+<h3>Putting It Together</h3>
+
+<p>Stack the three into a positioning statement you can actually use:</p>
+
+<blockquote>"I'm a [Layer One] for [Layer Two], who believes [Layer Three]."</blockquote>
+
+<p><em>Worked example:</em> "I'm a brand strategist for second-act founders — people building the thing they were too scared to build at 28 — who believes your story is your strongest asset and you've been burying it under jargon."</p>
+
+<p>Run yours through all three. If any layer is fuzzy, that's the layer your writing is leaking through.</p>
+
+<hr>
+
+<h2>Chapter Three: Writing the Bio (With Real Before &amp; Afters)</h2>
+
+<p>Your bio is the most-read, least-considered thing you'll ever write. People skim it in seven seconds and decide whether you're worth the room. Most bios waste those seconds on adjectives.</p>
+
+<p>Three rules first:</p>
+
+<ol><li><strong>Lead with the reader's interest, not your résumé.</strong> They care what you do <em>for them</em> before they care what you've done.</li><li><strong>One specific beats ten generals.</strong> A single concrete detail ("I wrote the launch that took them to $1M") outperforms a paragraph of "proven track record."</li><li><strong>Sound like a person.</strong> Read it aloud. If you wouldn't say it at dinner, cut it.</li></ol>
+
+<h3>Template A — The Third-Person Professional Bio</h3>
+
+<p><em>Structure:</em> [Name] + [Layer One/Two positioning] + [one proof with a number or name] + [point of view] + [human detail].</p>
+
+<p><strong>Before:</strong></p>
+<blockquote>"Jordan Ellis is a results-oriented marketing professional with over a decade of experience helping organizations achieve their goals through innovative, data-driven strategies."</blockquote>
+
+<p>Nothing in that sentence couldn't be said about ten thousand people. It's a fog.</p>
+
+<p><strong>After:</strong></p>
+<blockquote>"Jordan Ellis helps DTC skincare brands write email flows people actually open — work that's added seven figures to brands you've probably bought from. She thinks most email marketing fails because it sells before it earns the right to. She lives in Lisbon and has strong, unsolicited opinions about subject lines."</blockquote>
+
+<p>Specific. Opinionated. Human. You remember Jordan now.</p>
+
+<h3>Template B — The First-Person Short Bio (for sites, social, intros)</h3>
+
+<p><em>Structure:</em> [What I do, plainly] + [for whom] + [the belief] + [a line of personality].</p>
+
+<p><strong>Before:</strong></p>
+<blockquote>"I'm a passionate freelance writer dedicated to crafting compelling content that drives engagement and delivers value to clients across various industries."</blockquote>
+
+<p><strong>After:</strong></p>
+<blockquote>"I write the words founders are too close to their own work to find. Mostly for technical people who do extraordinary things and explain them like a tax form. I believe clarity is the highest form of respect. I have never once 'circled back' and I never will."</blockquote>
+
+<h3>Template C — The One-Liner (for bylines, panels, the elevator)</h3>
+
+<p><em>Structure:</em> [I help / I write] + [specific who] + [specific outcome], stated with a little teeth.</p>
+
+<ul><li><strong>Before:</strong> "Communications consultant and brand expert."</li><li><strong>After:</strong> "I help underestimated founders sound as formidable as they actually are."</li></ul>
+
+<p>Write all three for yourself. Notice that the one-liner is just your three-layer positioning, compressed. It always comes back to the framework.</p>
+
+<hr>
+
+<h2>Chapter Four: Voice — The Thing That Actually Differentiates You</h2>
+
+<p>Two people can have identical positioning and sound nothing alike. That difference is voice, and it's the one thing a competitor can't copy off your About page.</p>
+
+<p>Voice is built from small, repeatable choices:</p>
+
+<ul><li><strong>Sentence rhythm.</strong> Do you run long and rolling, or short and clipped? Mix deliberately. A punch lands harder after a long sentence sets it up. Like that.</li><li><strong>Diction.</strong> Your actual words. Do you say "folks" or "executives"? "Gut" or "intuition"? Pick the register that's truly yours and commit.</li><li><strong>What you refuse to say.</strong> Voice is defined as much by your no-fly list as your vocabulary. Banning "synergy," "passionate," and "humbled to announce" shapes your voice by subtraction.</li><li><strong>Point of view, recurring.</strong> The ideas you return to. Mine are reinvention, being misread, precision over decoration. Yours are the themes you can't stop writing about. Let them repeat. Repetition is how a voice becomes recognizable.</li></ul>
+
+<p><strong>A fast exercise:</strong> Write 150 words about your work with zero editing. Then highlight the three phrases that sound most like <em>you</em> and least like a template. Build outward from those. Your voice isn't something you invent. It's something you stop suppressing.</p>
+
+<blockquote>Positioning gets you considered. Voice gets you remembered. You need both, and only one of them can't be stolen.</blockquote>
+
+<hr>
+
+<h2>Chapter Five: The LinkedIn Audit Checklist</h2>
+
+<p>LinkedIn is where most of these rooms have a side entrance. Most profiles are obituaries — a list of where you used to work, written in the third-person passive voice of HR. Let's audit yours. Open your profile and go line by line.</p>
+
+<h3>The Headshot &amp; Banner</h3>
+<ul><li>[ ] Does your photo look like a person you'd want to talk to, or a hostage proof-of-life? Approachable beats stiff.</li><li>[ ] Is your banner working — a line of positioning, a proof point — or is it the default blue void? The banner is free real estate; use it for your one-liner.</li></ul>
+
+<h3>The Headline (the highest-leverage line on the platform)</h3>
+<ul><li>[ ] Does it say more than your job title? "Marketing Manager at X" is a wasted headline.</li><li>[ ] Does it use the three-layer formula — what you do, for whom, with an edge?</li><li><strong>Before:</strong> "Senior Brand Manager | MBA | Marketing Professional"</li><li><strong>After:</strong> "I make overlooked brands impossible to ignore | Brand strategy for founders in their second act"</li></ul>
+
+<h3>The About Section</h3>
+<ul><li>[ ] Does the first sentence earn the second? People only see two lines before "see more." Make line one a hook, not "I am a seasoned professional with..."</li><li>[ ] Is it first person and conversational, or stiff and third-person?</li><li>[ ] Is there at least one specific proof — a number, a name, a result?</li><li>[ ] Is there a point of view, a belief, a line of actual personality?</li><li>[ ] Is there a clear next step at the end (DM me, here's my site, here's how to work with me)?</li></ul>
+
+<h3>The Experience Section</h3>
+<ul><li>[ ] Have you rewritten at least your current role to describe <em>outcomes and beliefs</em>, not duties? "Responsible for managing" is the language of a job description. You're not applying — you're positioning.</li><li>[ ] Did you cut anything that no longer serves the room you want to be in? You're allowed to deprioritize the old self.</li></ul>
+
+<h3>The Overall Test</h3>
+<ul><li>[ ] Read the whole profile aloud. Count how many sentences you'd actually say to a human. If it's under half, rewrite until it's not.</li><li>[ ] Hand it to a friend who knows you. Ask: "Does this sound like me?" If they hesitate, your voice isn't on the page yet.</li></ul>
+
+<p>Run this once a quarter. Positioning drifts as you grow; the profile should keep up.</p>
+
+<hr>
+
+<h2>Chapter Six: From Page to Room</h2>
+
+<p>Writing yourself in is not a one-time edit. It's a posture. Here's how to keep the door open once you've written your way through it.</p>
+
+<p><strong>Say the specific thing in public, repeatedly.</strong> The point of view from Layer Three isn't just for your bio — it's for your posts, your talks, your replies. Repeat your themes until people associate them with your name. That association <em>is</em> being in the room.</p>
+
+<p><strong>Let the wrong people leave.</strong> Sharp positioning will lose you the people who were never going to hire, read, or champion you. Good. They were taking up space the right people couldn't fill. Precision costs you the indifferent and earns you the devoted.</p>
+
+<p><strong>Update as you become.</strong> The bio you wrote this year will feel small next year if you're growing. That's not failure — it's evidence. Rewrite as you reinvent. The page should always be slightly ahead of who you were and exactly level with who you're becoming.</p>
+
+<blockquote>The room was never locked. You just hadn't written the sentence that opened it yet. Now you have. Walk in.</blockquote>
+
+<hr>
+
+<h2>Keep Going</h2>
+
+<p>Positioning is the start. Voice is the depth.</p>
+
+<p>If you're ready to build a complete, documented voice — not just for yourself but for a brand, a company, a team that needs to sound like one person — <strong>The Brand Voice Playbook</strong> is the deep end of this pool. It's the premium, build-it-from-scratch companion to this guide.</p>
+
+<p>And if the writing in this book stirred something bigger — a sense that the self you're positioning is itself mid-rewrite — start with <strong>The Reinvention Workbook</strong>.</p>
+
+<p>More at <strong>mkparrish.com</strong>, where I help people stop sounding like everyone else and start sounding like the only option.</p>
+
+<p>You were always qualified for the room. Now you're legible. That was the only thing missing.</p>
+
+<p>— MK Parrish</p>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">MK Parrish</div>
+  <p class="footer-legal">© MK Parrish · <a href="https://mkparrish.com">mkparrish.com</a> · All rights reserved</p>
+</div>
+
+</body>
+</html>
