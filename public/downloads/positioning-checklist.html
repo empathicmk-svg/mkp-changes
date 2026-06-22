@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Positioning Checklist — MK Parrish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --obsidian: #111111;
+    --carbon: #1A1A1A;
+    --graphite: #2C2C2C;
+    --iron: #4A4A4A;
+    --ash: #7A7A7A;
+    --smoke: #B0B0B0;
+    --pearl: #F0F0EE;
+    --white: #FAFAF8;
+    --blush: #FFD6E4;
+    --petal: #F2AFC6;
+    --rose: #E0869F;
+    --carmine: #C75B78;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    /* Reusable gray → pink gradients */
+    --grad-pink: linear-gradient(120deg, var(--rose), var(--petal) 55%, var(--blush));
+    --grad-rule: linear-gradient(90deg, transparent, var(--petal), transparent);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(242,175,198,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, rgba(199,91,120,0.05), transparent 55%),
+      linear-gradient(180deg, var(--obsidian) 0%, var(--void) 38%);
+    background-attachment: fixed;
+    color: var(--pearl);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.78;
+    position: relative;
+  }
+  /* Grain overlay — the site's signature texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: screen;
+  }
+  ::selection { background: var(--petal); color: var(--void); }
+
+  /* ── COVER ─────────────────────────────────────────── */
+  .cover {
+    position: relative;
+    background: var(--obsidian);
+    border-bottom: 1px solid var(--graphite);
+    padding: 104px 48px 84px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% -10%, rgba(242,175,198,0.20) 0%, transparent 62%),
+      radial-gradient(ellipse 50% 50% at 88% 108%, rgba(199,91,120,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, rgba(176,176,176,0.06), transparent 45%);
+    pointer-events: none;
+  }
+  /* Thin gray→pink gradient hairline across the very top */
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--iron), var(--petal) 50%, var(--blush));
+    opacity: 0.7;
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: var(--petal);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7.5vw, 4.6rem);
+    letter-spacing: 0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    color: var(--white);
+  }
+  /* Soft gray→white→pink gradient fill on the lead words */
+  .cover h1 .grad {
+    background: linear-gradient(135deg, var(--pearl) 0%, var(--pearl) 50%, var(--blush) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pearl);
+    filter: drop-shadow(0 0 16px rgba(242,175,198,0.14));
+  }
+  .cover h1 .outline {
+    -webkit-text-stroke: 1px rgba(242,175,198,0.5);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Subtitle — matches the live site tagline: Playfair italic, petal */
+  .cover .subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color: rgba(242, 175, 198, 0.8);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .cover-rule {
+    width: 90px;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--petal), var(--blush), transparent);
+  }
+  .cover-meta {
+    margin-top: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+
+  /* ── CONTENT ───────────────────────────────────────── */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    counter-reset: section;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
+    color: var(--pearl);
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+
+  /* Section headings get an editorial mono counter, like the site's section numbers */
+  h2 {
+    counter-increment: section;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.3vw, 1.95rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pearl);
+    margin: 68px 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--graphite);
+    position: relative;
+  }
+  h2::before {
+    content: counter(section, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, var(--rose), var(--petal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--petal);
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--petal), rgba(242,175,198,0));
+  }
+  /* Sub-section labels — live-site accent: Playfair italic, petal */
+  h3 {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--petal);
+    margin: 40px 0 12px;
+  }
+  p { margin: 0 0 1.25em; color: var(--smoke); }
+  strong { color: var(--pearl); font-weight: 500; }
+  /* Emphasis — live-site accent: Playfair italic, petal */
+  em { font-family: var(--font-serif); font-style: italic; color: var(--petal); }
+  a { color: var(--petal); text-decoration: none; }
+  a:hover { color: var(--blush); text-decoration: underline; }
+
+  ul, ol { padding-left: 1.4em; margin: 0 0 1.6em; color: var(--smoke); }
+  li { margin-bottom: 0.55em; padding-left: 0.35em; }
+  ul li::marker { color: var(--petal); }
+  ol li::marker { color: var(--petal); font-family: var(--font-mono); font-size: 0.85em; }
+
+  blockquote {
+    position: relative;
+    border-left: 2px solid var(--petal);
+    margin: 40px 0;
+    padding: 26px 30px 26px 40px;
+    background: linear-gradient(110deg, rgba(242,175,198,0.10), rgba(176,176,176,0.04) 55%, transparent 90%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.08rem;
+    color: rgba(242, 175, 198, 0.9);
+    line-height: 1.6;
+  }
+  blockquote::before {
+    content: '\201C';
+    position: absolute;
+    top: 0.08em;
+    left: 0.14em;
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(242,175,198,0.22);
+    pointer-events: none;
+  }
+
+  pre {
+    background: var(--carbon);
+    border: 1px solid var(--graphite);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  code { font-family: var(--font-mono); font-size: 0.86rem; color: var(--petal); white-space: pre; }
+  p > code, li > code {
+    background: var(--carbon);
+    padding: 2px 6px;
+    font-size: 0.82em;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 0.9rem; }
+  thead tr { background: linear-gradient(90deg, rgba(242,175,198,0.12), rgba(176,176,176,0.04) 70%, transparent); }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--petal);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--graphite); color: var(--smoke); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--iron) 25%, var(--petal) 50%, var(--iron) 75%, transparent);
+    opacity: 0.6;
+    margin: 52px 0;
+  }
+
+  /* ── FOOTER ────────────────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--graphite);
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--obsidian);
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-legal {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--iron);
+  }
+  .footer-legal a { color: var(--ash); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     PRINT EDITION — light, publisher-style layout for the PDF.
+     The screen stays dark; the printed book inverts to a white page
+     with black header boxes and pink/white titles.
+     ═══════════════════════════════════════════════════════════════ */
+  @media print {
+    @page { margin: 0; }
+
+    html, body {
+      background: #ffffff !important;
+      color: #232323 !important;
+    }
+    body::before { display: none !important; }   /* no grain in print */
+
+    /* ── COVER: a full-page black panel on a white sheet ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      background: #ffffff !important;
+      border-bottom: none;
+      padding: 0;
+      break-after: page;
+    }
+    .cover::before, .cover::after { display: none !important; }
+    /* The panel fills the printable page and centres the title block,
+       instead of floating as a thin band in the middle of the sheet. */
+    .cover-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 52px;
+      background: #0E0E0E;
+      border: 1px solid rgba(242, 175, 198, 0.45);
+    }
+    .cover-kicker { color: var(--petal); }
+    .cover h1 { color: #ffffff; font-size: clamp(3rem, 8vw, 4rem); }
+    /* Solid fills only. background-clip:text and text-stroke rasterise as
+       opaque boxes / vanish entirely in print — that is what turned the old
+       title into a white rectangle. Keep the white + pink two-tone with
+       plain fills so it renders identically everywhere. */
+    .cover h1 .grad {
+      background: none;
+      -webkit-background-clip: border-box; background-clip: border-box;
+      -webkit-text-fill-color: #ffffff; color: #ffffff;
+      filter: none;
+    }
+    .cover h1 .outline {
+      -webkit-text-stroke: 0;
+      -webkit-text-fill-color: var(--petal); color: var(--petal);
+    }
+    .cover .subtitle { color: var(--petal); }
+    .cover-meta { color: #B0B0B0; }
+
+    /* ── BODY: black text on white ── */
+    .content { padding-top: 64px; color: #232323; }
+    p { color: #2b2b2b; }
+    /* Black highlighter — strong emphasis & labels ("Instructions:", names) */
+    strong {
+      background: #0E0E0E;
+      color: #FAFAF8;
+      font-weight: 600;
+      padding: 0.05em 0.34em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+    a { color: #B23A59; }
+    ul li::marker, ol li::marker { color: #B23A59; }
+
+    /* ── SECTION HEADERS: black boxes, pink number + white title ── */
+    h2 {
+      background: #0E0E0E;
+      color: #ffffff;
+      padding: 24px 30px;
+      margin: 40px 0 42px;
+      border: none;
+      break-before: page;          /* every Part / section starts a fresh page */
+    }
+    /* …except the first section, which follows the cover (and any intro/metadata
+       block) on page 2 instead of forcing a near-empty page before it. */
+    .content h2:first-of-type { break-before: auto; }
+    h2::before {
+      background: none;
+      -webkit-text-fill-color: var(--petal);
+      color: var(--petal);
+      margin-bottom: 10px;
+    }
+    h2::after { display: none; }
+
+    /* Exercise titles — pink, with extra breathing room above each */
+    h3 { color: #B23A59; margin: 58px 0 18px; }
+    /* Petal-pink highlighter — emphasis & labels ("Example:", key words) */
+    em {
+      background: var(--petal);
+      color: #1A1008;
+      font-style: italic;
+      padding: 0.05em 0.34em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    /* ── PULL QUOTES: soft panel, pink rule + mark, dark text ── */
+    blockquote {
+      background: #F5F2F0;
+      border-left: 3px solid #B23A59;
+      color: #232323;
+    }
+    blockquote::before { color: rgba(178, 58, 89, 0.3); }
+
+    /* ── TABLES: black header band ── */
+    thead tr { background: #0E0E0E; }
+    th { color: #ffffff; border-bottom: 1px solid #0E0E0E; }
+    td { color: #2b2b2b; border-bottom: 1px solid #e3e3e3; }
+
+    /* ── CODE: light chip ── */
+    pre { background: #f3f3f1; border: 1px solid #e3e3e3; }
+    pre code { color: #A8344F; }
+    p > code, li > code { background: #f0eeec; color: #A8344F; }
+
+    hr {
+      background: linear-gradient(90deg, transparent, #cfcfcf 25%, #B23A59 50%, #cfcfcf 75%, transparent);
+      opacity: 1;
+    }
+    /* The markdown "---" separators always sit just before a section heading,
+       and every section already starts a fresh page — so a rule landing right
+       before a heading is redundant and can strand alone on a near-empty page.
+       Hide those; keep any genuine in-content rule (one not followed by H2). */
+    hr:has(+ h2) { display: none; }
+
+    /* ── FOOTER: white page, black signature ── */
+    .footer { background: #ffffff; border-top: 1px solid #dddddd; }
+    .footer-logo { color: #0A0A0A; }
+    .footer-legal { color: #8a8a8a; }
+    .footer-legal a { color: #B23A59; }
+
+    /* ── PAGINATION — natural flow; just avoid bad breaks ── */
+    h1, h2, h3 { break-after: avoid-page; break-inside: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    h2, h3, li, tr, blockquote, pre, table, figure, img { break-inside: avoid; }
+    ul, ol { break-before: avoid-page; }
+    .footer { break-before: avoid-page; }
+  }
+  *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-kicker">MK Parrish · Free Resource</div>
+    <h1><span class="grad">The Positioning</span> <span class="outline">Checklist</span></h1>
+    <p class="subtitle">The 12-point audit I run on every client before we rewrite a single line.</p>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">By MK Parrish</div>
+  </div>
+</div>
+
+<div class="content">
+<h2>How to Use This</h2>
+
+<p>Most copy doesn't fail because the sentences are bad. It fails because the <em>positioning</em> underneath the sentences is blurry — so no rewrite, no clever headline, no amount of "make it punchier" can save it. You're polishing a window in a house with no foundation.</p>
+
+<p>This is the audit I run before I touch a word of anyone's copy. Twelve questions. Go through them honestly. Every <em>no</em> is a leak — a place your copy is losing people before they ever get to your offer. Fix the leaks first. Then the writing gets easy, because there's finally something true to write toward.</p>
+
+<p>Read each point, answer <em>yes</em> or <em>no</em> out loud, and write one sentence on what you'd change. Don't rush to <em>yes</em>. The uncomfortable <em>no</em> is the one worth the most money.</p>
+
+<blockquote>You can't write your way out of a positioning problem. You have to <em>think</em> your way out — then the writing is just transcription.</blockquote>
+
+<hr>
+
+<h2>Part One: The Reader</h2>
+
+<h3>1 — Can you name one person, not a demographic?</h3>
+
+<p><strong>The test:</strong> Could you describe your ideal reader specifically enough that a stranger could pick her out of a crowded room — her job, her 11pm worry, the exact sentence she'd say to a friend about her problem?</p>
+
+<p><em>The failure mode:</em> "Women 25–45 who want to grow." That's a census, not a person. Copy written to everyone lands on no one. Write to one specific human and a thousand others will feel seen.</p>
+
+<h3>2 — Do you know the problem in <em>her</em> words, not yours?</h3>
+
+<p><strong>The test:</strong> Open a real message, review, or DM from someone like her. Are you using the language she actually uses — or the industry language you've absorbed?</p>
+
+<p><em>The failure mode:</em> You wrote "scalable content infrastructure." She said "I'm so tired of starting from scratch every Monday." Hers wins, every time. The market will tell you the words. Your job is to listen and steal them.</p>
+
+<h3>3 — Are you meeting her where she is, not where you wish she were?</h3>
+
+<p><strong>The test:</strong> Does your copy assume she already believes what you believe? Or does it start at <em>her</em> current understanding and walk her one true step forward?</p>
+
+<p><em>The failure mode:</em> You're selling the advanced solution to someone who hasn't admitted she has the beginner problem. You skipped the part where she gets to feel understood. No one buys the answer to a question they haven't been allowed to ask yet.</p>
+
+<hr>
+
+<h2>Part Two: The Offer</h2>
+
+<h3>4 — Can you say what it is in one sentence, without "and"?</h3>
+
+<p><strong>The test:</strong> Finish this: "This is a ___ that helps ___ do ___." If you need a second clause, a slash, or the word "basically," the offer isn't clear yet.</p>
+
+<p><em>The failure mode:</em> "It's a course and a community and also some coaching and templates." A pile of features is not an offer. One clear transformation is. Confusion is the most expensive thing on your page.</p>
+
+<h3>5 — Is the transformation specific and provable?</h3>
+
+<p><strong>The test:</strong> Does your promise name a <em>before</em> and an <em>after</em> a real person could verify? Or is it a mood — "elevate," "empower," "unlock"?</p>
+
+<p><em>The failure mode:</em> "Unlock your potential." Compared to what, measured how, by when? Vague promises read as either dishonest or unsure. "Write a bio you'd actually send" is small, concrete, and believable — and believable beats impressive.</p>
+
+<h3>6 — Have you named what it's <em>not</em>?</h3>
+
+<p><strong>The test:</strong> Does your copy draw a line — who this isn't for, what it won't do, the shortcut it refuses to sell?</p>
+
+<p><em>The failure mode:</em> In trying to be for everyone, you became forgettable to everyone. Naming the wrong-fit reader is the fastest way to make the right-fit one lean in. Boundaries are a trust signal. The thing that excludes is the thing that attracts.</p>
+
+<hr>
+
+<h2>Part Three: The Difference</h2>
+
+<h3>7 — Would your copy still make sense with a competitor's logo on it?</h3>
+
+<p><strong>The test:</strong> Swap your name for the closest competitor. Does anything break? If the page reads identically with their brand on top, you've written category copy, not positioning.</p>
+
+<p><em>The failure mode:</em> "We deliver results with integrity and a personal touch." So does everyone, allegedly. If it's not specific enough to be <em>only</em> yours, it's not doing any work. Say the thing only you would say.</p>
+
+<h3>8 — Is there a point of view someone could disagree with?</h3>
+
+<p><strong>The test:</strong> Find the sentence in your copy that a reasonable person in your field could argue with. Can't find one? That's the problem.</p>
+
+<p><em>The failure mode:</em> You sanded off every edge to avoid being wrong, and now there's nothing to be <em>right</em> about either. A real opinion is what separates a voice from a brochure. Safe is just forgettable with better manners.</p>
+
+<h3>9 — Does it sound like a person, or a committee?</h3>
+
+<p><strong>The test:</strong> Read it out loud. Do you wince? Do you hit phrases you'd never say to an actual human — "leverage synergies," "passionate about excellence"?</p>
+
+<p><em>The failure mode:</em> Professional-sounding mush. You traded your real voice for one that sounds "safe," and safe is invisible. The voice is the moat. Anyone can copy your offer; no one can copy how you see.</p>
+
+<hr>
+
+<h2>Part Four: The Proof &amp; The Path</h2>
+
+<h3>10 — Does your proof match your promise?</h3>
+
+<p><strong>The test:</strong> For your biggest claim, is there a piece of evidence sitting right next to it — a specific result, a screenshot, a named example, a number?</p>
+
+<p><em>The failure mode:</em> Big promise, no receipts. Or worse, proof of the wrong thing — testimonials about how "lovely you are to work with" when the promise was revenue. Match the evidence to the exact claim you're making, or the claim reads as a wish.</p>
+
+<h3>11 — Is there exactly one obvious next step?</h3>
+
+<p><strong>The test:</strong> On any given page, count the things you're asking the reader to do. The right number is one.</p>
+
+<p><em>The failure mode:</em> "Follow me, and read this, and book a call, and check out the blog, and..." Every extra option is a tax on a tired brain. One page, one decision. Confidence looks like a single clear door, not a hallway of them.</p>
+
+<h3>12 — Does the first line earn the second?</h3>
+
+<p><strong>The test:</strong> Read only your opening sentence. Does it create enough tension, curiosity, or recognition that <em>not</em> reading the next line feels uncomfortable?</p>
+
+<p><em>The failure mode:</em> You opened with a warm-up — context, throat-clearing, "In today's fast-paced world." The first line has one job: buy the second line. If it's not pulling, cut it and start where it gets interesting. Usually that's the third sentence you wrote.</p>
+
+<hr>
+
+<h2>What to Do With Your No's</h2>
+
+<p>Count them. Three or fewer, and you have a copy problem — sharpen the lines and you're close. Four or more, and you have a <em>positioning</em> problem wearing a copy costume, and no rewrite will fix it until the thinking underneath gets clear.</p>
+
+<p>That's not bad news. It's the most useful thing you'll learn this week. A copy problem takes an afternoon. A positioning problem, once you see it, changes everything downstream — your page, your pricing, the kind of client who shows up. Most people never diagnose it. You just did.</p>
+
+<blockquote>Clarity isn't a writing skill. It's a thinking skill that happens to come out as writing.</blockquote>
+
+<p>Start with your loudest <em>no</em> — the one you felt in your stomach. Write one true sentence fixing it. That sentence is the beginning of the rewrite.</p>
+
+<hr>
+
+<h2>When You're Ready to Go Deeper</h2>
+
+<p>This checklist diagnoses. The work of rewriting is its own craft — and I've written the playbooks.</p>
+
+<p>If your <strong>voice</strong> is the thing that went flat, <strong>Write Yourself Into the Room</strong> rebuilds it from the inside out. If it's your <strong>brand language</strong> that keeps coming out generic, the <strong>Brand Voice Playbook</strong> is the system I use with clients. And if you'd rather hand it to someone who does this every day, that's what I'm here for.</p>
+
+<p>Find it all at <strong>mkparrish.com</strong> — where I write about voice, positioning, and the long work of sounding like yourself on purpose.</p>
+
+<p>You found the leaks. That's the part most people skip.</p>
+
+<p>— MK Parrish</p>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">MK Parrish</div>
+  <p class="footer-legal">© MK Parrish · <a href="https://mkparrish.com">mkparrish.com</a> · All rights reserved</p>
+</div>
+
+</body>
+</html>
