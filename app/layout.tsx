@@ -1,0 +1,49 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import Nav from "@/app/components/Nav";
+import Footer from "@/app/components/Footer";
+
+export const metadata: Metadata = {
+  title: "MK Parrish — Rewrite Your Story",
+  description:
+    "Words, strategy, and reinvention for people ready to stop being misread. Copywriting, ghostwriting, and positioning services for founders, executives, and professionals in transition.",
+  metadataBase: new URL("https://www.mkparrish.com"),
+  openGraph: {
+    title: "MK Parrish — Rewrite Your Story",
+    description:
+      "Words, strategy, and reinvention for people ready to stop being misread.",
+    url: "https://www.mkparrish.com",
+    siteName: "MK Parrish",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MK Parrish — Rewrite Your Story",
+    description:
+      "Words, strategy, and reinvention for people ready to stop being misread.",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark h-full antialiased">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="flex min-h-full flex-col overflow-x-hidden">
+        <Nav />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
