@@ -1,33 +1,5 @@
 import Link from "next/link";
-import { SUBSTACK_URL, CONTACT, SOCIALS } from "@/app/lib/config";
-
-const footerGroups = [
-  {
-    heading: "Work",
-    links: [
-      { label: "All Offerings",      href: "/#offerings" },
-      { label: "Web Design & Build", href: "/studio" },
-      { label: "Outbound & Growth",  href: "/growth" },
-      { label: "Messaging & Copy",   href: "/brand" },
-    ],
-  },
-  {
-    heading: "Read",
-    links: [
-      { label: "Writing",     href: "/writing" },
-      { label: "The Shelf",   href: "/shelf" },
-      { label: "The Margins", href: "/margins" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "How I Work", href: "/how-i-work" },
-      { label: "About",      href: "/about" },
-      { label: "Contact",    href: "/contact" },
-    ],
-  },
-];
+import { CONTACT } from "@/app/lib/config";
 
 export default function Footer() {
   return (
@@ -37,7 +9,7 @@ export default function Footer() {
           <div>
             <p className="font-display text-2xl uppercase tracking-[0.02em] text-pearl">MK Parrish</p>
             <p className="mt-1 font-serif text-base italic text-smoke" style={{ fontWeight: 500 }}>
-              Rewrite Your Story
+              Growth strategy, websites, and messaging.
             </p>
             <div className="mt-4 flex flex-col gap-1.5">
               <a href={`mailto:${CONTACT.email}`} className="font-body text-[0.7rem] tracking-[0.08em] text-iron transition hover:text-petal">
@@ -47,59 +19,28 @@ export default function Footer() {
                 /in/mkparrish
               </a>
             </div>
+          </div>
 
-            {/* Social chips — petal pink, black text */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              {SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${s.label} — ${s.handle}`}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-petal px-3.5 py-1.5 font-body text-[0.65rem] font-bold uppercase tracking-[0.12em] text-void transition hover:bg-pearl"
-                >
-                  <span>{s.label}</span>
-                  <span className="font-medium normal-case tracking-normal text-void">{s.handle}</span>
-                </a>
-              ))}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-8">
+            <div className="flex flex-col gap-3">
+              <p className="font-body text-[0.6rem] font-bold uppercase tracking-[0.28em] text-petal/70">Services</p>
+              <Link href="/#offerings" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">All Offerings</Link>
+              <Link href="/studio" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">Web Design</Link>
+              <Link href="/growth" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">Growth</Link>
+              <Link href="/brand" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">Messaging</Link>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p className="font-body text-[0.6rem] font-bold uppercase tracking-[0.28em] text-petal/70">Company</p>
+              <Link href="/how-i-work" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">How I Work</Link>
+              <Link href="/resources" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">Resources</Link>
+              <Link href="/about" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">About</Link>
+              <Link href="/contact" className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl">Contact</Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-3">
-            {footerGroups.map((group) => (
-              <div key={group.heading} className="flex flex-col gap-3">
-                <p className="font-body text-[0.6rem] font-bold uppercase tracking-[0.28em] text-petal/70">
-                  {group.heading}
-                </p>
-                {group.links.map((l) => (
-                  <Link
-                    key={l.label}
-                    href={l.href}
-                    className="nav-link font-body text-[0.7rem] font-medium uppercase tracking-[0.15em] text-iron transition hover:text-pearl"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </div>
-
           <div className="flex flex-col gap-3">
-            <Link
-              href="/book"
-              className="btn-primary px-5 py-2.5 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-void"
-            >
-              Book a Call
-            </Link>
-            <a
-              href={SUBSTACK_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-ghost px-5 py-2.5 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em]"
-            >
-              The Margins
-            </a>
+            <Link href="/book" className="btn-primary px-5 py-2.5 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em] text-void">Book a Call</Link>
+            <Link href="/resources" className="btn-ghost px-5 py-2.5 font-body text-[0.7rem] font-bold uppercase tracking-[0.2em]">Free Resources</Link>
           </div>
         </div>
 
